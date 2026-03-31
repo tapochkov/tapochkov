@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Барная ТТК — Шпаргалка</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --accent: #e8c84a;
+    --accent2: #e05a2b;
+    --text: #e8e4dc;
+    --muted: #888;
+    --shake: #e05a2b;
+    --build: #4ab3e8;
+    --muddle: #8be84a;
+    --layer: #c44ae8;
+    --shot: #e8834a;
+    --other: #aaa;
+    --category-bg: #1a1a1a;
+    --drink-name-color: #fff;
+    --category-border-style: border-left: 3px solid var(--accent);
+  }
+
+  [data-theme="light"] {
+    --bg: #ffffff;
+    --surface: #f5f5f3;
+    --border: #d8d4cc;
+    --accent: #b8860b;
+    --accent2: #c0392b;
+    --text: #1a1a1a;
+    --muted: #777;
+    --shake: #c0392b;
+    --build: #1a6fa8;
+    --muddle: #27863a;
+    --layer: #7b2fbe;
+    --shot: #d4680a;
+    --other: #888;
+    --category-bg: var(--accent);
+    --drink-name-color: #111;
+  }
+
+  /* ── THEME TOGGLE BUTTON ── */
+  #theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 9999;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5pt;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  #theme-toggle:hover {
+    background: var(--accent);
+    color: #111;
+    border-color: var(--accent);
+  }
+  #theme-toggle .icon { font-size: 10pt; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5pt;
+    line-height: 1.35;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 8mm 8mm;
+    background: var(--bg);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 3mm;
+    margin-bottom: 4mm;
+  }
+  .header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .header .legend {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .legend-item {
+    font-size: 7pt;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+  .m-shake  { background: var(--shake);  color: #fff; }
+  .m-build  { background: var(--build);  color: #000; }
+  .m-muddle { background: var(--muddle); color: #000; }
+  .m-layer  { background: var(--layer);  color: #fff; }
+  .m-shot   { background: var(--shot);   color: #fff; }
+  .m-other  { background: #555; color: #fff; }
+  [data-theme="light"] .m-other { background: #888; }
+
+  /* ── GRID LAYOUT ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3mm;
+  }
+
+  /* ── CATEGORY BLOCK ── */
+  .category {
+    break-inside: avoid;
+  }
+  .category-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--category-bg);
+    padding: 2px 6px;
+    margin-bottom: 2mm;
+    border-left: 3px solid var(--accent);
+  }
+  [data-theme="light"] .category-title {
+    color: #fff;
+    border-left: none;
+    border-radius: 2px;
+  }
+
+  /* ── DRINK CARD ── */
+  .drink {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 5px;
+    margin-bottom: 2mm;
+    break-inside: avoid;
+  }
+  [data-theme="light"] .drink {
+    border-left-width: 3px;
+  }
+  [data-theme="light"] .drink-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+  }
+
+  .drink-header {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+  }
+  .drink-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: var(--drink-name-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+  .method-badge {
+    font-size: 6.5pt;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+  .glass-info {
+    font-size: 7pt;
+    color: var(--muted);
+    font-style: italic;
+    flex: 1;
+    text-align: right;
+  }
+
+  .ingredients {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px 8px;
+    margin-bottom: 2px;
+  }
+  .ingredients li {
+    font-size: 7.5pt;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .ingredients li .amt {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .garnish {
+    font-size: 7pt;
+    color: var(--muted);
+  }
+  .garnish::before { content: '✦ '; color: var(--accent2); }
+
+  .note {
+    font-size: 7pt;
+    color: var(--accent2);
+    font-style: italic;
+    margin-top: 1px;
+  }
+
+  /* ── SHOTS — compact inline ── */
+  .shots-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2mm;
+  }
+
+  /* ── LEMONADES ── */
+  .lemonades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2mm;
+  }
+
+  /* ── TEA/COFFEE — 2 col ── */
+  .tea-coffee-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2mm;
+  }
+
+  /* full-width section wrapper */
+  .full-section {
+    margin-top: 3mm;
+    break-inside: avoid;
+  }
+  .full-section .category-title {
+    margin-bottom: 2mm;
+  }
+
+  /* divider */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3mm 0;
+  }
+
+  @media print {
+    #theme-toggle { display: none; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body:not([data-theme="light"]) { background: #0d0d0d !important; }
+    body[data-theme="light"] { background: #fff !important; }
+    .page { margin: 0; padding: 6mm; width: 210mm; }
+  }
+</style>
+</head>
+<body>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+  <span class="icon" id="theme-icon">☀️</span>
+  <span id="theme-label">Светлая</span>
+</button>
+
+<script>
+  (function() {
+    const saved = localStorage.getItem('barTheme') || 'dark';
+    if (saved === 'light') {
+      document.body.setAttribute('data-theme', 'light');
+      document.getElementById('theme-icon').textContent = '🌙';
+      document.getElementById('theme-label').textContent = 'Тёмная';
+    }
+  })();
+
+  function toggleTheme() {
+    const isLight = document.body.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.body.removeAttribute('data-theme');
+      document.getElementById('theme-icon').textContent = '☀️';
+      document.getElementById('theme-label').textContent = 'Светлая';
+      localStorage.setItem('barTheme', 'dark');
+    } else {
+      document.body.setAttribute('data-theme', 'light');
+      document.getElementById('theme-icon').textContent = '🌙';
+      document.getElementById('theme-label').textContent = 'Тёмная';
+      localStorage.setItem('barTheme', 'light');
+    }
+  }
+</script>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>☰ Барная ТТК</h1>
+    <div class="legend">
+      <span class="legend-item m-shake">ШЕЙК</span>
+      <span class="legend-item m-build">БИЛД</span>
+      <span class="legend-item m-muddle">МАДЛ+БИЛД</span>
+      <span class="legend-item m-layer">СЛЭЙНГ</span>
+      <span class="legend-item m-shot">ШОТ</span>
+      <span class="legend-item m-other">ПРОЧЕЕ</span>
+    </div>
+  </div>
+
+  <!-- TOP 3-column grid: Водка / Джин / Ром -->
+  <div class="grid">
+
+    <!-- НА ОСНОВЕ ВОДКИ -->
+    <div class="category">
+      <div class="category-title">🥃 На основе водки</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Секс на пляже</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Водка <span class="amt">50мл</span></li>
+          <li>Ананасовый сок <span class="amt">50мл</span></li>
+          <li>Морс клюква <span class="amt">50мл</span></li>
+          <li>Персиковый ликёр <span class="amt">10мл</span></li>
+          <li>Персиковый сироп <span class="amt">10мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 20гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Космополитен</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Коктейльная рюмка · б/льда</span>
+        </div>
+        <ul class="ingredients">
+          <li>Водка <span class="amt">40мл</span></li>
+          <li>Трипл сек <span class="amt">10мл</span></li>
+          <li>Морс ягодный <span class="amt">40мл</span></li>
+          <li>Сок лимона <span class="amt">10мл</span></li>
+        </ul>
+        <div class="garnish">Коктейльная вишня 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Белый русский</span>
+          <span class="method-badge m-other">НЕ МЕШАТЬ</span>
+          <span class="glass-info">Рокс</span>
+        </div>
+        <ul class="ingredients">
+          <li>Водка <span class="amt">30мл</span></li>
+          <li>Кофейный ликёр <span class="amt">30мл</span></li>
+          <li>Сливки <span class="amt">30мл</span></li>
+        </ul>
+        <div class="garnish">5 зёрен кофе · не размешивать</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Лонг-Айленд</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Водка <span class="amt">15мл</span></li>
+          <li>Джин <span class="amt">15мл</span></li>
+          <li>Трипл сек <span class="amt">15мл</span></li>
+          <li>Текила <span class="amt">15мл</span></li>
+          <li>Ром <span class="amt">15мл</span></li>
+          <li>Сок лимона <span class="amt">10мл</span></li>
+          <li>Сахарный сироп <span class="amt">10мл</span></li>
+          <li>Кола <span class="amt">80мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Кровавая Мэри</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Водка «Пять озёр» <span class="amt">50мл</span></li>
+          <li>Томатный сок <span class="amt">120мл</span></li>
+          <li>Сок лимона <span class="amt">15мл</span></li>
+          <li>Табаско <span class="amt">2–3 дэша</span></li>
+          <li>Соль, перец <span class="amt">2гр</span></li>
+        </ul>
+        <div class="garnish">Лимон 10гр</div>
+      </div>
+    </div>
+
+    <!-- НА ОСНОВЕ ДЖИНА -->
+    <div class="category">
+      <div class="category-title">🌿 На основе джина</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Джин-Тоник</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">50мл</span></li>
+          <li>Тоник <span class="amt">100мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Двойной Джин-Тоник</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Дабл-Рокс / пивной · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">100мл</span></li>
+          <li>Тоник <span class="amt">200мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Джон Коллинз</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">50мл</span></li>
+          <li>Сок лимона <span class="amt">30мл</span></li>
+          <li>Сахарный сироп <span class="amt">15мл</span></li>
+          <li>Содовая <span class="amt">70мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Саус Сайд</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Рокс · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">50мл</span></li>
+          <li>Лимонный сок <span class="amt">30мл</span></li>
+          <li>Сахарный сироп <span class="amt">30мл</span></li>
+          <li>Мята (в шейкер) <span class="amt">10гр</span></li>
+        </ul>
+        <div class="garnish">Мята 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Клоувер Клаб</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Коктейльная рюмка</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">50мл</span></li>
+          <li>Сироп малина <span class="amt">25мл</span></li>
+          <li>Сок лайма <span class="amt">20мл</span></li>
+          <li>Яичный белок <span class="amt">15мл</span></li>
+        </ul>
+        <div class="garnish">Мята 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Негрони</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Джин Хаус <span class="amt">30мл</span></li>
+          <li>Мартини Россо <span class="amt">30мл</span></li>
+          <li>Кампари <span class="amt">30мл</span></li>
+        </ul>
+        <div class="garnish">Цедра апельсина 5гр</div>
+      </div>
+    </div>
+
+    <!-- НА ОСНОВЕ РОМА -->
+    <div class="category">
+      <div class="category-title">🏝 На основе рома</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Ром Кола</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Ром Хаус <span class="amt">50мл</span></li>
+          <li>Кола <span class="amt">120мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Пина Колада</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Ром Хаус <span class="amt">30мл</span></li>
+          <li>Ананасовый сок <span class="amt">80мл</span></li>
+          <li>Малибу <span class="amt">30мл</span></li>
+          <li>Кокосовый сироп <span class="amt">15мл</span></li>
+          <li>Сливки <span class="amt">15мл</span></li>
+        </ul>
+        <div class="garnish">Взбитые сливки 15гр · вишня 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Кайпиринья</span>
+          <span class="method-badge m-muddle">МАДЛ+БИЛД</span>
+          <span class="glass-info">Рокс · краш</span>
+        </div>
+        <ul class="ingredients">
+          <li>Ром Хаус <span class="amt">50мл</span></li>
+          <li>Сок лайма <span class="amt">30мл</span></li>
+          <li>Сахарный сироп <span class="amt">15мл</span></li>
+        </ul>
+        <div class="garnish">Лайм 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Мохито</span>
+          <span class="method-badge m-muddle">БИЛД+МАДЛ</span>
+          <span class="glass-info">Харрикейн · КРАШ!!!</span>
+        </div>
+        <ul class="ingredients">
+          <li>Ром Хаус <span class="amt">50мл</span></li>
+          <li>Сахарный сироп <span class="amt">30мл</span></li>
+          <li>Лайм <span class="amt">30гр</span></li>
+          <li>Мята <span class="amt">10гр</span></li>
+          <li>Содовая <span class="amt">120мл</span></li>
+        </ul>
+        <div class="garnish">Мята 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Хемингуэй Спешл</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Ром Хаус <span class="amt">50мл</span></li>
+          <li>Ликёр Мараскино <span class="amt">15мл</span></li>
+          <li>Сок грейпфрута <span class="amt">50мл</span></li>
+          <li>Сок лайма <span class="amt">15мл</span></li>
+        </ul>
+        <div class="garnish">Грейпфрут 10гр</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECOND 3-column grid: Виски / Текила / Вермуты -->
+  <div class="grid">
+
+    <!-- НА ОСНОВЕ ВИСКИ -->
+    <div class="category">
+      <div class="category-title">🥃 На основе виски</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Виски Кола</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски Хаус <span class="amt">50мл</span></li>
+          <li>Кола <span class="amt">120мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Двойной Виски Кола</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Дабл-Рокс / пивной</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски Хаус <span class="amt">100мл</span></li>
+          <li>Кола <span class="amt">240мл</span></li>
+        </ul>
+        <div class="garnish">Лимон 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Виски-Саур</span>
+          <span class="method-badge m-shake">ШЕЙК!!!</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски <span class="amt">50мл</span></li>
+          <li>Сахарный сироп <span class="amt">15мл</span></li>
+          <li>Сок лимона <span class="amt">30мл</span></li>
+          <li>Яичный белок <span class="amt">25мл</span></li>
+          <li>Ангостура <span class="amt">1 дэш</span></li>
+        </ul>
+        <div class="garnish">Апельсин 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Бульвардье</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски <span class="amt">30мл</span></li>
+          <li>Мартини Россо <span class="amt">30мл</span></li>
+          <li>Кампари <span class="amt">30мл</span></li>
+        </ul>
+        <div class="garnish">Цедра апельсина 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Манхэттен</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски <span class="amt">50мл</span></li>
+          <li>Мартини Россо <span class="amt">30мл</span></li>
+          <li>Ангостура <span class="amt">1 дэш</span></li>
+        </ul>
+        <div class="garnish">Цедра апельсина 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Персиковый Джулеп</span>
+          <span class="method-badge m-shake">ШЕЙК</span>
+          <span class="glass-info">Рокс · КРАШ!!!</span>
+        </div>
+        <ul class="ingredients">
+          <li>Виски <span class="amt">50мл</span></li>
+          <li>Персиковый ликёр <span class="amt">10мл</span></li>
+          <li>Персиковый сироп <span class="amt">10мл</span></li>
+          <li>Сок яблоко <span class="amt">50мл</span></li>
+          <li>Мята (в шейкер) <span class="amt">10гр</span></li>
+        </ul>
+        <div class="garnish">Мята 5гр</div>
+      </div>
+    </div>
+
+    <!-- НА ОСНОВЕ ТЕКИЛЫ -->
+    <div class="category">
+      <div class="category-title">🌵 На основе текилы</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Текила Санрайз</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Харрикейн · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Текила <span class="amt">50мл</span></li>
+          <li>Сок апельсин <span class="amt">120мл</span></li>
+          <li>Сироп Гренадин <span class="amt">20мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 5гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Маргарита</span>
+          <span class="method-badge m-shake">ШЕЙК</span>
+          <span class="glass-info">Коктейльная рюмка · СОЛЬ!!!</span>
+        </div>
+        <ul class="ingredients">
+          <li>Текила <span class="amt">50мл</span></li>
+          <li>Трипл Сек <span class="amt">30мл</span></li>
+          <li>Фреш лайма <span class="amt">30мл</span></li>
+          <li>Сахарный сироп <span class="amt">20мл</span></li>
+        </ul>
+        <div class="garnish">Лайм 10гр · кромка из соли!</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Клубничная Маргарита</span>
+          <span class="method-badge m-shake">ШЕЙК</span>
+          <span class="glass-info">Коктейльная рюмка · СОЛЬ!!!</span>
+        </div>
+        <ul class="ingredients">
+          <li>Текила <span class="amt">50мл</span></li>
+          <li>Трипл Сек <span class="amt">20мл</span></li>
+          <li>Фреш лайма <span class="amt">30мл</span></li>
+          <li>Сироп клубника <span class="amt">15мл</span></li>
+        </ul>
+        <div class="garnish">Коктейльная вишня 5гр · соль!</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Текила Сауэр</span>
+          <span class="method-badge m-shake">ДАБЛ ШЕЙК</span>
+          <span class="glass-info">Рокс · 4 кубика</span>
+        </div>
+        <ul class="ingredients">
+          <li>Текила <span class="amt">50мл</span></li>
+          <li>Сахарный сироп <span class="amt">20мл</span></li>
+          <li>Сок лимона <span class="amt">10мл</span></li>
+          <li>Яичный белок <span class="amt">25мл</span></li>
+        </ul>
+        <div class="garnish">Лимонная цедра 10гр (гарниш)</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Дэнни Трехо</span>
+          <span class="method-badge m-shake">ШЕЙК</span>
+          <span class="glass-info">Рокс · краш</span>
+        </div>
+        <ul class="ingredients">
+          <li>Текила <span class="amt">50мл</span></li>
+          <li>Сахарный сироп <span class="amt">10мл</span></li>
+          <li>Сок апельсина <span class="amt">30мл</span></li>
+          <li>Сок грейпфрут <span class="amt">30мл</span></li>
+          <li>Сок лайм <span class="amt">10мл</span></li>
+          <li>Сок лимон <span class="amt">10мл</span></li>
+        </ul>
+        <div class="garnish">Лайм 10гр</div>
+      </div>
+    </div>
+
+    <!-- НА ОСНОВЕ ВЕРМУТОВ -->
+    <div class="category">
+      <div class="category-title">🍷 На основе вермутов</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Кампари Шприц</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Винный бокал · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Кампари <span class="amt">60мл</span></li>
+          <li>Тоник <span class="amt">120мл</span></li>
+          <li>Абрау Дюрсо <span class="amt">120мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Апероль Шприц</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Винный бокал · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Апероль <span class="amt">60мл</span></li>
+          <li>Абрау Дюрсо <span class="amt">120мл</span></li>
+          <li>Содовая <span class="amt">120мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Кампари Тоник</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Винный бокал · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Кампари <span class="amt">80мл</span></li>
+          <li>Сок лайма <span class="amt">10мл</span></li>
+          <li>Тоник <span class="amt">100мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 10гр</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Мартини Фиеро-Тоник</span>
+          <span class="method-badge m-build">БИЛД</span>
+          <span class="glass-info">Винный бокал · лёд</span>
+        </div>
+        <ul class="ingredients">
+          <li>Мартини Фиеро <span class="amt">80мл</span></li>
+          <li>Тоник <span class="amt">100мл</span></li>
+        </ul>
+        <div class="garnish">Апельсин 10гр</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SHOTS + БЕЗАЛКОГОЛЬНЫЕ -->
+  <div class="grid">
+
+    <!-- ШОТЫ -->
+    <div class="category">
+      <div class="category-title">🥃 Шоты</div>
+      <div class="shots-grid">
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Б-52</span>
+            <span class="method-badge m-layer">СЛЭЙНГ</span>
+            <span class="glass-info">Шот</span>
+          </div>
+          <ul class="ingredients">
+            <li>Кофейный ликёр <span class="amt">20мл</span></li>
+            <li>Сливочный ликёр <span class="amt">20мл</span></li>
+            <li>Трипл Сек <span class="amt">20мл</span></li>
+          </ul>
+        </div>
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Рус.-Яп. Война</span>
+            <span class="method-badge m-layer">СЛЭЙНГ</span>
+            <span class="glass-info">Шот</span>
+          </div>
+          <ul class="ingredients">
+            <li>Дынный ликёр <span class="amt">25мл</span></li>
+            <li>Водка <span class="amt">25мл</span></li>
+          </ul>
+          <div class="garnish">Коктейльная вишня 5гр</div>
+        </div>
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Амиго</span>
+            <span class="method-badge m-layer">СЛЭЙНГ</span>
+            <span class="glass-info">Шот</span>
+          </div>
+          <ul class="ingredients">
+            <li>Кофейный ликёр <span class="amt">20мл</span></li>
+            <li>Сливки <span class="amt">20мл</span></li>
+            <li>Текила <span class="amt">20мл</span></li>
+          </ul>
+        </div>
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Алёшка (×6)</span>
+            <span class="method-badge m-shake">ШЕЙК</span>
+            <span class="glass-info">6 шотов</span>
+          </div>
+          <ul class="ingredients">
+            <li>Водка <span class="amt">100мл</span></li>
+            <li>Сок грейпфрут <span class="amt">150мл</span></li>
+            <li>Сироп гренадин <span class="amt">20мл</span></li>
+          </ul>
+        </div>
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Санрайз (×6)</span>
+            <span class="method-badge m-shake">ШЕЙК</span>
+            <span class="glass-info">6 шотов</span>
+          </div>
+          <ul class="ingredients">
+            <li>Текила Хаус <span class="amt">100мл</span></li>
+            <li>Сок апельсин <span class="amt">150мл</span></li>
+            <li>Сироп гренадин <span class="amt">20мл</span></li>
+          </ul>
+          <div class="note">Сироп влить в конце по шотам</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- БЕЗАЛКОГОЛЬНЫЕ -->
+    <div class="category" style="grid-column: span 2;">
+      <div class="category-title">🌊 Безалкогольные</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2mm;">
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Мохито Б/А</span>
+            <span class="method-badge m-muddle">МАДЛ+БИЛД</span>
+            <span class="glass-info">Харрикейн · краш</span>
+          </div>
+          <ul class="ingredients">
+            <li>Черноголовка газ <span class="amt">100мл</span></li>
+            <li>Лайм <span class="amt">35гр</span></li>
+            <li>Мята <span class="amt">10гр</span></li>
+            <li>Сироп <span class="amt">30мл</span></li>
+          </ul>
+          <div class="garnish">Мята 5гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Тропический Микс</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Сок ананас <span class="amt">100мл</span></li>
+            <li>Сироп киви <span class="amt">20мл</span></li>
+            <li>Сок лимона <span class="amt">15мл</span></li>
+            <li>Содовая <span class="amt">100мл</span></li>
+          </ul>
+          <div class="garnish">Апельсин 10гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Пина Колада Б/А</span>
+            <span class="method-badge m-shake">ШЕЙК</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Сок ананасовый <span class="amt">100мл</span></li>
+            <li>Сливки <span class="amt">30мл</span></li>
+            <li>Сироп кокос <span class="amt">20мл</span></li>
+          </ul>
+          <div class="garnish">Посыпка кондит. 15гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Azure Bay</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Содовая <span class="amt">150мл</span></li>
+            <li>Сок лимона <span class="amt">20гр</span></li>
+            <li>Сок яблоко <span class="amt">20гр</span></li>
+            <li>Сироп Блю Кюрасао <span class="amt">10гр</span></li>
+          </ul>
+          <div class="garnish">Лимон 10гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Red Orange</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Содовая <span class="amt">150мл</span></li>
+            <li>Сок лимона <span class="amt">20мл</span></li>
+            <li>Сок апельсин <span class="amt">50мл</span></li>
+            <li>Сироп гренадин <span class="amt">10мл</span></li>
+          </ul>
+          <div class="garnish">Апельсин 15гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Bamble</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Сок апельсин <span class="amt">150мл</span></li>
+            <li>Сироп баблгам <span class="amt">25мл</span></li>
+            <li>Сок лимон <span class="amt">25мл</span></li>
+            <li>Содовая <span class="amt">70мл</span></li>
+          </ul>
+          <div class="garnish">Апельсин 15гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Сливочный Попкорн</span>
+            <span class="method-badge m-shake">ШЕЙК</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Сок яблоко <span class="amt">150мл</span></li>
+            <li>Сироп попкорн <span class="amt">30мл</span></li>
+            <li>Сливки <span class="amt">30мл</span></li>
+          </ul>
+          <div class="garnish">Посыпка кондит. 15гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Манго-Маракуйя</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Сок ананас <span class="amt">50мл</span></li>
+            <li>Сироп маракуйя <span class="amt">20мл</span></li>
+            <li>Сок лимон <span class="amt">50мл</span></li>
+            <li>Содовая <span class="amt">120мл</span></li>
+          </ul>
+          <div class="garnish">Апельсин 5гр</div>
+        </div>
+
+        <div class="drink">
+          <div class="drink-header">
+            <span class="drink-name">Облепиха Тархун</span>
+            <span class="method-badge m-build">БИЛД</span>
+            <span class="glass-info">Харрикейн · лёд</span>
+          </div>
+          <ul class="ingredients">
+            <li>Морс облепиха <span class="amt">150мл</span></li>
+            <li>Сироп тархун <span class="amt">25мл</span></li>
+            <li>Сок лимона <span class="amt">25мл</span></li>
+            <li>Содовая <span class="amt">50мл</span></li>
+          </ul>
+          <div class="garnish">Облепиха 10гр</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ЛИМОНАДЫ + ЧАЙ + КОФЕ -->
+  <div class="grid">
+
+    <!-- ЛИМОНАДЫ -->
+    <div class="category">
+      <div class="category-title">🍋 Лимонады (графин · глитр!)</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Арбуз-Лайм</span>
+        </div>
+        <ul class="ingredients">
+          <li>Сироп арбуз <span class="amt">60мл</span></li>
+          <li>Сироп лайм <span class="amt">50мл</span></li>
+          <li>Лимонка <span class="amt">40мл</span></li>
+          <li>Лайм <span class="amt">20гр</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Малина-Грейпфрут</span>
+        </div>
+        <ul class="ingredients">
+          <li>Сироп малина <span class="amt">60мл</span></li>
+          <li>Сироп грейпфрут <span class="amt">50мл</span></li>
+          <li>Лимонка <span class="amt">40мл</span></li>
+          <li>Грейпфрут <span class="amt">40гр</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Киви-Эстрагон</span>
+        </div>
+        <ul class="ingredients">
+          <li>Сироп киви <span class="amt">60мл</span></li>
+          <li>Сироп эстрагон <span class="amt">50мл</span></li>
+          <li>Лимонка <span class="amt">40мл</span></li>
+          <li>Мята <span class="amt">20гр</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- АВТОРСКИЕ ЧАИ -->
+    <div class="category">
+      <div class="category-title">🍵 Авторские чаи</div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Имбирь-Лимон</span></div>
+        <ul class="ingredients">
+          <li>Дух леса <span class="amt">10гр</span></li>
+          <li>Имбирь <span class="amt">5гр</span></li>
+          <li>Лимон <span class="amt">30гр</span></li>
+          <li>Мёд <span class="amt">10гр</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Кленовое Яблоко</span></div>
+        <ul class="ingredients">
+          <li>Чёрный чай <span class="amt">10гр</span></li>
+          <li>Яблоко <span class="amt">30гр</span></li>
+          <li>Лимон <span class="amt">20гр</span></li>
+          <li>Корица <span class="amt">5гр</span></li>
+          <li>Мёд <span class="amt">10гр</span></li>
+          <li>Кленовый сироп <span class="amt">15мл</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Смородина с мятой</span></div>
+        <ul class="ingredients">
+          <li>Чёрный чай <span class="amt">10гр</span></li>
+          <li>Смородина <span class="amt">35гр</span></li>
+          <li>Мята <span class="amt">10гр</span></li>
+          <li>Лимон <span class="amt">30гр</span></li>
+          <li>Сироп смородина <span class="amt">15мл</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Облепиха Апельсин</span></div>
+        <ul class="ingredients">
+          <li>Дух леса <span class="amt">10гр</span></li>
+          <li>Облепиха <span class="amt">30гр</span></li>
+          <li>Апельсин <span class="amt">40гр</span></li>
+          <li>Мёд <span class="amt">10гр</span></li>
+          <li>Гвоздика <span class="amt">2гр</span></li>
+          <li>Кардамон <span class="amt">2гр</span></li>
+          <li>Морс облепиха <span class="amt">100мл</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Цитрусовый</span></div>
+        <ul class="ingredients">
+          <li>Чёрный чай <span class="amt">10гр</span></li>
+          <li>Апельсин <span class="amt">20гр</span></li>
+          <li>Грейпфрут <span class="amt">25гр</span></li>
+          <li>Сироп маракуйя <span class="amt">15мл</span></li>
+          <li>Клюква <span class="amt">15гр</span></li>
+          <li>Корица <span class="amt">5гр</span></li>
+          <li>Гвоздика <span class="amt">2гр</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- КОФЕ -->
+    <div class="category">
+      <div class="category-title">☕ Кофе</div>
+
+      <div class="drink">
+        <div class="drink-header">
+          <span class="drink-name">Американо</span>
+        </div>
+        <ul class="ingredients">
+          <li>Эспрессо двойной <span class="amt">18гр</span></li>
+          <li>Вода горячая <span class="amt">150мл</span></li>
+        </ul>
+        <div class="note">Сначала вода — потом эспрессо</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Эспрессо</span></div>
+        <ul class="ingredients">
+          <li>Пролив с одного носика <span class="amt">18гр</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Эспрессо двойной</span></div>
+        <ul class="ingredients">
+          <li>Пролив с двух носиков <span class="amt">18гр</span></li>
+        </ul>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Капучино</span></div>
+        <ul class="ingredients">
+          <li>Эспрессо одинарный <span class="amt">18гр</span></li>
+          <li>Молоко <span class="amt">180мл</span></li>
+        </ul>
+        <div class="note">Сначала эспрессо — потом молоко</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Латте</span></div>
+        <ul class="ingredients">
+          <li>Молоко <span class="amt">180мл</span></li>
+          <li>Эспрессо одинарный <span class="amt">18гр</span></li>
+        </ul>
+        <div class="note">Сначала молоко — потом эспрессо</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Мокко</span></div>
+        <ul class="ingredients">
+          <li>Молоко <span class="amt">180мл</span></li>
+          <li>Эспрессо одинарный <span class="amt">18гр</span></li>
+          <li>Сироп шоколад <span class="amt">10мл</span></li>
+          <li>Какао порошок <span class="amt">10гр</span></li>
+        </ul>
+        <div class="note">Всё в питчер — потом взбиваем</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Какао</span></div>
+        <ul class="ingredients">
+          <li>Какао порошок <span class="amt">20гр</span></li>
+          <li>Молоко <span class="amt">200мл</span></li>
+        </ul>
+        <div class="note">Всё в питчер — потом взбиваем</div>
+      </div>
+
+      <div class="drink">
+        <div class="drink-header"><span class="drink-name">Горячий Шоколад</span></div>
+        <ul class="ingredients">
+          <li>Молоко <span class="amt">200мл</span></li>
+          <li>Какао порошок <span class="amt">20гр</span></li>
+          <li>Сироп шоколад <span class="amt">10мл</span></li>
+        </ul>
+        <div class="note">Всё в питчер — потом взбиваем</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
